@@ -21,18 +21,25 @@ const getBody = (req, callback) => {
 };
 
 // here, you could declare one or more variables to store what comes back from the form.
-let item = "Enter something below.";
+let bgColor = "white";
 
 // here, you can change the form below to modify the input fields and what is displayed.
 // This is just ordinary html with string interpolation.
 const form = () => {
   return `
-  <body>
-  <p>${item}</p>
-  <form method="POST">
-  <input name="item"></input>
-  <button type="submit">Submit</button>
-  </form>
+  <body style="background-color: ${bgColor};">
+    <p>Select a background color for the page:</p>
+    <form method="POST">
+      <label for="color">Color:</label>
+      <select name="color" id="color">
+        <option value="white">White</option>
+        <option value="lightblue">Light Blue</option>
+        <option value="lightgreen">Light Green</option>
+        <option value="lightcoral">Light Coral</option>
+        <option value="lightyellow">Light Yellow</option>
+      </select>
+      <button type="submit">Apply</button>
+    </form>
   </body>
   `;
 };
@@ -44,10 +51,10 @@ const server = http.createServer((req, res) => {
     getBody(req, (body) => {
       console.log("The body of the post is ", body);
       // here, you can add your own logic
-      if (body["item"]) {
-        item = body["item"];
+      if (body["color"]) {
+        bgColor = body["color"];
       } else {
-        item = "Nothing was entered.";
+        bgColor = "white";
       }
       // Your code changes would end here
       res.writeHead(303, {
@@ -60,5 +67,10 @@ const server = http.createServer((req, res) => {
   }
 });
 
+server.on("request", (req) => {  
+  console.log("event received: ", req.method, req.url);  
+}); 
+
 server.listen(3000);
 console.log("The server is listening on port 3000.");
+// your code starts here
