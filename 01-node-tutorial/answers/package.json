@@ -1,8 +1,7 @@
 {
-  "name": "tutorial",
+  "name": "answers",
   "version": "1.0.0",
-  "description": "",
-  "main": "1-intro.js",
+  "main": "01-intro.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon prompter.js",
@@ -11,10 +10,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^3.1.7"
   }
 }
