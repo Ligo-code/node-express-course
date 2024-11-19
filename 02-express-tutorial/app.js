@@ -14,7 +14,7 @@ app.get("/api/v1/test", (req, res) => {
         res.json({ msg: "It worked!" });
     } catch (error) {
         console.error("Error in /api/v1/test:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).json;
     }
 });
 
@@ -24,7 +24,7 @@ app.get("/api/v1/products", (req, res) => {
         res.json(products);
     } catch (error) {
         console.error("Error in /api/v1/products:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).json;
     }
 });
 
@@ -42,14 +42,14 @@ app.get("/api/v1/products/:productID", (req, res) => {
         const product = products.find((p) => p.id === productID);
         if (!product) {
             console.warn(`Product not found: ID ${productID}`);
-            res.status(404).json({ message: "Product was not found." });
+            res.status(200).json({ message: "No product found with the given ID." });
             return;
         }
 
         res.json(product);
     } catch (error) {
         console.error(`Error in /api/v1/products/${req.params.productID}:`, error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).json;
     }
 });
 
@@ -106,7 +106,7 @@ app.get("/api/v1/query", (req, res) => {
         res.json(filteredProducts);
     } catch (error) {
         console.error("Error in /api/v1/query:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).json;
     }
 });
 
@@ -116,7 +116,7 @@ app.all("*", (req, res) => {
         res.status(404).send("Page not found");
     } catch (error) {
         console.error("Error in 404 handler:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).json;
     }
 });
 
