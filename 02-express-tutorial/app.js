@@ -2,11 +2,47 @@ console.log("Express Tutorial");
 
 const express = require("express");
 const { products } = require("./data");
-
+const { people } = require("./data");
+const peopleRouter = require("./routes/people");
 const app = express();
+
 app.use(express.static("./public"));
 
 console.log("Static files are being served from ./public");
+
+const logger = (req, res, next) => {
+    console.log(`${req.method} ${req.url} at ${new Date().toISOString()}`);
+    next();
+};
+app.use(logger);
+
+app.use("/api/v1/people", peopleRouter);
+
+app.use(express.static("./methods-public"));
+app.use(express.json());
+
+app.get("/api/v1/people", (req, res) => {
+    res.json(people);
+})
+
+app.post("/api/v1/people", (req, res) => {
+    try {
+        const { name } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ success: false, message: "Please provide a name" });
+        }
+
+        const newPerson = { id: people.length + 1, name };
+        people.push(newPerson);
+        
+        res.status(201).json({ success: true, data: newPerson });
+    } catch (error) {        
+        console.error("Error in POST /api/v1/people:", error);
+        
+        res.status(500).json({ success: false, message: "An error occurred while adding the person." });
+    }
+});
 
 app.get("/api/v1/test", (req, res) => {
     try {
@@ -14,7 +50,7 @@ app.get("/api/v1/test", (req, res) => {
         res.json({ msg: "It worked!" });
     } catch (error) {
         console.error("Error in /api/v1/test:", error);
-        res.status(500).json;
+        res.status(500).json();
     }
 });
 
@@ -24,7 +60,7 @@ app.get("/api/v1/products", (req, res) => {
         res.json(products);
     } catch (error) {
         console.error("Error in /api/v1/products:", error);
-        res.status(500).json;
+        res.status(500).json();
     }
 });
 
@@ -49,7 +85,7 @@ app.get("/api/v1/products/:productID", (req, res) => {
         res.json(product);
     } catch (error) {
         console.error(`Error in /api/v1/products/${req.params.productID}:`, error);
-        res.status(500).json;
+        res.status(500).json();
     }
 });
 
@@ -106,7 +142,7 @@ app.get("/api/v1/query", (req, res) => {
         res.json(filteredProducts);
     } catch (error) {
         console.error("Error in /api/v1/query:", error);
-        res.status(500).json;
+        res.status(500).json();
     }
 });
 
@@ -116,8 +152,13 @@ app.all("*", (req, res) => {
         res.status(404).send("Page not found");
     } catch (error) {
         console.error("Error in 404 handler:", error);
-        res.status(500).json;
+        res.status(500).json();
     }
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ success: false, message: "Something went wrong on the server." });
 });
 
 app.listen(3000, () => {
