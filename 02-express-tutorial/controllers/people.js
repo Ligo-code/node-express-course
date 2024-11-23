@@ -5,9 +5,9 @@ const getPeople = (req, res) => {
 };
 
 const addPerson = (req, res) => {
-    try {        
-        const { name } = req.body || {};
-        
+    try {
+        const { name } = req.body;
+
         if (!name) {
             return res.status(400).json({ success: false, message: "Please provide a name" });
         }
@@ -16,38 +16,60 @@ const addPerson = (req, res) => {
         people.push(newPerson);
 
         res.status(201).json({ success: true, data: newPerson });
-    } catch (error) {        
+    } catch (error) {
         console.error("Error in POST /api/v1/people:", error);
         res.status(500).json({ success: false, message: "An internal server error occurred." });
     }
 };
 
 const getPersonById = (req, res) => {
-    const person = people.find(p => p.id === parseInt(req.params.id));
-    if (!person) {
-        return res.status(200).json({ success: false, message: "Person not found" });
+    const id = parseInt(req.params.id, 10);
+
+    if (isNaN(id)) {
+        return res.status(400).json({ success: false, message: "Invalid ID provided." });
     }
+
+    const person = people.find((p) => p.id === id);
+    if (!person) {
+        return res.status(404).json({ success: false, message: "Person not found" });
+    }
+
     res.json({ success: true, data: person });
 };
 
 const updatePerson = (req, res) => {
-    const person = people.find(p => p.id === parseInt(req.params.id));
-    if (!person) {
-        return res.status(200).json({ success: false, message: "Person not found" });
+    const id = parseInt(req.params.id, 10);
+
+    if (isNaN(id)) {
+        return res.status(400).json({ success: false, message: "Invalid ID provided." });
     }
+
+    const person = people.find((p) => p.id === id);
+    if (!person) {
+        return res.status(404).json({ success: false, message: "Person not found" });
+    }
+
     const { name } = req.body;
     if (!name) {
         return res.status(400).json({ success: false, message: "Please provide a name" });
     }
+
     person.name = name;
     res.json({ success: true, data: person });
 };
 
 const deletePerson = (req, res) => {
-    const personIndex = people.findIndex(p => p.id === parseInt(req.params.id));
-    if (personIndex === -1) {
-        return res.status(200).json({ success: false, message: "Person not found" });
+    const id = parseInt(req.params.id, 10);
+
+    if (isNaN(id)) {
+        return res.status(400).json({ success: false, message: "Invalid ID provided." });
     }
+
+    const personIndex = people.findIndex((p) => p.id === id);
+    if (personIndex === -1) {
+        return res.status(404).json({ success: false, message: "Person not found" });
+    }
+
     people.splice(personIndex, 1);
     res.json({ success: true, message: "Person deleted" });
 };

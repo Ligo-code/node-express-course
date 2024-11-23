@@ -6,7 +6,7 @@ const { getPeople, addPerson, getPersonById, updatePerson, deletePerson } = requ
 router.get("/", getPeople); 
 router.post("/", addPerson); 
 router.get("/:id", getPersonById); 
-router.put("/:id", updatePerson); 
+router.patch("/:id", updatePerson); 
 router.delete("/:id", deletePerson); 
 
 module.exports = router;
