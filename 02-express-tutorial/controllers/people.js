@@ -1,7 +1,7 @@
 const { people } = require("../data");
 
 const getPeople = (req, res) => {
-    res.json(people);
+    res.status(200).json(people);
 };
 
 const addPerson = (req, res) => {
@@ -34,7 +34,7 @@ const getPersonById = (req, res) => {
         return res.status(404).json({ success: false, message: "Person not found" });
     }
 
-    res.json({ success: true, data: person });
+    res.status(200).json({ success: true, data: person });
 };
 
 const updatePerson = (req, res) => {
@@ -55,7 +55,7 @@ const updatePerson = (req, res) => {
     }
 
     person.name = name;
-    res.json({ success: true, data: person });
+    res.status(200).json({ success: true, data: person });
 };
 
 const deletePerson = (req, res) => {
@@ -71,7 +71,7 @@ const deletePerson = (req, res) => {
     }
 
     people.splice(personIndex, 1);
-    res.json({ success: true, message: "Person deleted" });
+    res.status(200).json({ success: true, message: "Person deleted" });
 };
 
 module.exports = { getPeople, addPerson, getPersonById, updatePerson, deletePerson };
